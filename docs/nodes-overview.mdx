@@ -1,0 +1,49 @@
+---
+sidebar_position: 2
+---
+
+# Visão Geral dos Nós
+
+No FlowMon os nós são divididos em categorias funcionais. Cada nó possui uma responsabilidade específica na construção da lógica do script final, desde a definição do ambiente até a tomada de decisão.
+
+## 1. Nós de Contexto e Controle
+Estes nós definem o ciclo de vida do script e são fundamentais para a hierarquia do fluxo.
+
+- **Start Node**: O ponto de entrada obrigatório. Ele define as configurações globais, como o `Time` (tempo total de execução) e o `Interval` (intervalo entre as coletas). Sem ele, o script não possui parâmetros de duração.
+- **Finish Node**: O ponto de encerramento de um ramo. Ele é responsável por fechar o laço de repetição (`done`) e garantir que o script aguarde o tempo de intervalo (`sleep`) antes da próxima iteração.
+
+## 2. Nó de Dispositivo
+O nó de **Device** é a ponte entre a modelagem e a execução física.
+
+- **Configuração de Alvo**: Permite alternar entre execução **Local** ou **Remota**.
+- **Conexão via SSH**: Para dispositivos remotos, armazena o Host, Usuário e Senha. 
+- **Geração de Laço**: No código Bash, este nó é quem inicia a estrutura `while [ $SECONDS -lt $TOTAL_TIME ]`, garantindo que todos os sensores conectados a ele rodem continuamente.
+
+## 3. Nós de Monitoramento
+São os nós que extraem dados do sistema operacional. Eles traduzem cliques em comandos complexos de Shell.
+
+- **CPU Node**: Coletar métricas de processamento.
+- **Memory Node**: Reporta memória livre, usada e cache, e coleta dados.
+- **Disk Node**: Usa o comando `df` para monitorar ocupação de partições.
+- **Zombies Node**: Identifica processos zumbis.
+- **Ping Node**: Testa a conectividade de rede e latência.
+- **Service Node**: Monitora se um processo específico está ativo e coleta métricas.
+
+## 4. Nó de Rejuvenescimento
+Este é o nó de ação corretiva. Ele não apenas coleta dados, mas toma decisões para evitar falhas causadas do envelhecimento de software (*Software Aging*).
+
+- **Estratégias de Gatilho**:
+    - **Timer**: Executa a ação em tempos fixos.
+    - **Threshold**: Executa a ação se uma métrica (ex: memória) ultrapassar um valor limite.
+    - **Prediction (ARIMA)**: Utiliza estatística para prever quando o sistema irá falhar e age antecipadamente.
+- **Ações Disponíveis**: Permite configurar comandos automáticos para `Restart Service`, `Stop Service`, `Reboot OS` ou `Shutdown OS`.
+
+## 5. Nós Utilitários
+Ajudam na organização e na legibilidade do script gerado.
+
+- **Log Node**: Insere prefixos personalizados e timestamps na saída do terminal.
+- **Comment Node**: Adiciona linhas de comentário no código-fonte gerado.
+
+:::info[Dependência]
+Um nó de Rejuvenescimento deve sempre estar conectado a um nó de Monitoramento para que ele tenha dados sobre os quais decidir o limiar ou a predição.
+:::

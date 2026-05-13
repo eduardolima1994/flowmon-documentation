@@ -1,0 +1,97 @@
+---
+sidebar_position: 7
+---
+
+# Criando meu Primeiro Fluxo
+
+Este guia orienta os usuários na montagem de fluxos focados na coleta de métricas de recursos computacionais (CPU, Memória, Disco, etc.) utilizando os *Monitoring Nodes* do **FlowMon**.
+
+### Objetivo
+
+Criar um fluxo (*workflow*) que monitore múltiplos recursos em um dispositivo remoto e valide a correta geração do Shell Script correspondente.
+
+### Fazer Registro
+
+1. Na página de registro, preencha os campos obrigatórios:
+   - Nome de usuário
+   - E-mail
+   - Senha
+
+2. Clique no botão `Register`.
+
+3. Após o cadastro ser concluído com sucesso, você poderá acessar o sistema utilizando suas credenciais na tela de login.
+
+
+### Fazer Login
+
+1. Na página de login, insira as suas credenciais de acesso.
+2. Clique no botão `Login`.
+3. Você será redirecionado para a lista de projetos.
+
+
+### Criar Novo Projeto
+
+1. Na tela `Saved Projects`, clique no ícone `New Project` (localizado no canto superior direito da tela de Projetos Salvos).
+2. Você será levado para a área principal de modelagem.
+3. Um ID único será gerado automaticamente para o seu novo projeto.
+
+Abaixo, apresentamos o processo para monitorar o uso de memória de um servidor.
+
+### Passo 1: Abrir Painel de Nós
+1. Na tela principal de modelagem, clique no botão de menu/nós (localizado nos cantos superiores ou inferiores da tela e representado por um +).
+2. O painel lateral com os componentes disponíveis será aberto. 
+> **Dica:** No painel, é possível procurar os nós rapidamente por nome ou palavras-chave através da barra de busca.
+
+### Passo 2: Adicionar e Configurar o Nó Start
+1. No painel de nós, localize o nó **Start**.
+2. Clique nele para adicioná-lo à área de modelagem.
+3. Clique no nó `Start` para selecioná-lo e abrir o painel de propriedades à direita.
+4. No painel de configuração, defina os parâmetros:
+   - **Project Name:** `Monitoramento Servidor 1`.
+   - **Time:** `60` (segundos totais de monitoramento).
+   - **Interval:** `5` (intervalo entre cada coleta, em segundos).
+   - **Infinity:** Deixe desmarcado para garantir uma execução finita.
+
+### Passo 3: Adicionar o Nó Device
+1. Abra novamente o painel lateral de nós.
+2. Selecione a opção `Device`. Ele aparecerá na área de trabalho.
+
+### Passo 4: Conectar Start ao Device
+1. Clique no **ponto de conexão** (pequeno círculo) à direita do nó `Start`.
+2. Arraste a linha até o ponto de conexão à esquerda do nó `Device`.
+3. Uma linha de fluxo ligará agora os dois componentes.
+
+### Passo 5: Configurar o Nó Device
+1. Clique no nó `Device` para selecioná-lo.
+2. No painel de configuração à direita, preencha:
+   - **Name:** `ServidorWeb01`.
+   - **Is Remote:** Selecione para que o script execute remotamente. 
+   - Forneça o IP, Utilizador e Palavra-passe do servidor alvo.
+
+
+### Passo 6: Adicionar o Nó Memory
+1. No painel de nós, selecione o nó **Memory**.
+2. Conecte a saída do `Device` à entrada do `Memory`.
+
+### Passo 7: Configurar o Nó Memory
+Clique no nó `Memory` para ativar as suas opções no painel lateral. Selecione as métricas desejadas:
+- [x] **Used:** Memória em uso
+- [x] **Free:** Memória livre
+- [ ] **Total:** Memória total
+- [ ] **Available:** Memória disponível
+
+### Passo 8: Adicionar o Nó Finish
+1. No painel, adicione o nó **Finish**.
+2. Conecte a saída do nó `Memory` à entrada do nó `Finish`.
+
+### Passo 9: Gerar Script
+1. No Menu Superior, clique no botão `Generate`.
+2. O sistema validará se o fluxo respeita as Regras de Boa Formação (WFRs).
+3. Se o fluxo estiver correto, o terminal integrado abrirá exibindo o **Código Shell completo**, o nome do ficheiro e o tamanho do script gerado.
+
+### Passo 10: Executar Script
+1. Após a geração do script, clique no botão `Run` no Menu Superior.
+2. O terminal de saída mostrará os resultados em tempo real:
+   - **Saída Padrão:** Exibe as métricas de memória recolhidas.
+   - **Erros:** Informará problemas caso a execução falhe.
+   - **Conclusão:** O sistema avisará quando o tempo de execução (`Time`) chegar ao fim.
