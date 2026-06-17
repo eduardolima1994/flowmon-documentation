@@ -97,7 +97,7 @@ const config = {
           },
           
           {
-            href: 'https://flowmon.ct.ws/',
+            href: 'https://srv1681497.hstgr.cloud/',
             label: 'FlowMon',
             position: 'right',
           },
